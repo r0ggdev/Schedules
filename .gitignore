@@ -1,0 +1,18 @@
+
+# Temp files of python
+**/__pycache__/
+
+# Virtual environment
+.env
+
+# drivers
+drivers/
+
+# Credentials
+credentials.env
+
+# Test reports
+tests/example.py
+
+# Logs
+logs/
