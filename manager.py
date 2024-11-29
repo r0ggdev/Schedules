@@ -35,3 +35,11 @@ class DriverManager:
             raise ValueError(f"Unsupported browser type: {driver_type}")
         
         return driver[driver_type](driver_path)
+    
+    @classmethod
+    def _reset(cls):
+        """Método para restablecer el WebDriver, eliminando la instancia singleton"""
+        if cls.__instance:
+            cls.__instance.quit()  # Asegúrate de cerrar el WebDriver si está en ejecución
+            cls.__instance = None  # Elimina la instancia para permitir que se cree una nueva
+
