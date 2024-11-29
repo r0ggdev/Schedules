@@ -1,0 +1,37 @@
+{
+  "version": "2.0.0",
+
+  "tasks": [
+    {
+      "label": "RunTest",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "./.vscode/tasks/log_name.py", // Llamamos al script Python
+        "${input:folderTestName}", // El folder de los tests
+        "${input:testName}" // El nombre del test
+      ],
+      "problemMatcher": [],
+      "group": "build",
+      "presentation": {
+        "reveal": "silent"
+      }
+    }
+  ],
+
+  "inputs": [
+    {
+      "id": "folderTestName",
+      "type": "promptString",
+      "description": "Ingrese el nombre del folder del test a ejecutar",
+      "default": "tests"
+    },
+
+    {
+      "id": "testName",
+      "type": "promptString",
+      "description": "Ingrese el nombre del test a ejecutar",
+      "default": "test_manager"
+    }
+  ]
+}
