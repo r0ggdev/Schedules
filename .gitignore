@@ -15,4 +15,4 @@ credentials.env
 tests/example.py
 
 # Logs
-logs/
+**/logs/
