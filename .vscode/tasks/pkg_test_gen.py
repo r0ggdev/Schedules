@@ -4,7 +4,7 @@ import subprocess
 import time
 
 def generate_log_name(test_name):
-    log_name = f"{test_name}_{time.strftime("%Y-%m-%d_%H-%M-%S")}.log"
+    log_name = f"{test_name}_{time.strftime('%Y-%m-%d_%H-%M-%S')}.log"
     return log_name
 
 def run_tests(test_folder, test_name):
@@ -19,7 +19,7 @@ def run_tests(test_folder, test_name):
     
     # Ejecutar los tests
     command = [
-        python_path, "-m", "unittest", f"{test_folder}.{test_name}"
+        python_path, "-m", "unittest", "discover" ,f"{test_folder}.{test_name}"
     ]
     
     # Abrir el archivo de log para redirigir la salida

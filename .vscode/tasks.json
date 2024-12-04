@@ -1,21 +1,48 @@
 {
   "version": "2.0.0",
-
+  
   "tasks": [
     {
-      "label": "RunTest",
+      "label": "🐍 createVirtualEnvironment",
+      "type": "shell",
+      "command":"Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force; if (!(Test-Path -Path \".env\")) { python -m venv .env; .\\.env\\Scripts\\pip install -r requirements.txt } else { Write-Output \"El entorno virtual ya existe\" }",
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "✅ runTest",
       "type": "shell",
       "command": "python",
       "args": [
-        "./.vscode/tasks/log_name.py", // Llamamos al script Python
+        "./.vscode/tasks/test_names.py", // Llamamos al script Python
         "${input:folderTestName}", // El folder de los tests
         "${input:testName}" // El nombre del test
       ],
       "problemMatcher": [],
-      "group": "build",
-      "presentation": {
-        "reveal": "silent"
-      }
+      "group": "build"
+    },
+    {
+      "label": "🗂️ runPackageTests",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "./.vscode/tasks/pkg_test_gen.py", // Llamamos al script Python
+        "${input:folderpkgTestName}", // El folder principal de los tests
+        "${input:testPackage}" // El paquete del test
+      ],
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "🆕 createPkgTest",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "./.vscode/tasks/pkg_test_create.py", // Llamamos al script Python
+        "${input:folderTests}" // El folder de los tests
+      ],
+      "problemMatcher": [],
+      "group": "build"
     }
   ],
 
@@ -23,15 +50,36 @@
     {
       "id": "folderTestName",
       "type": "promptString",
-      "description": "Ingrese el nombre del folder del test a ejecutar",
-      "default": "tests"
+      "description": "Ingrese el nombre de la carpeta del test a ejecutar (las carpetas se separan por '.')",
+      "default": "tests.tests_manager"
     },
 
     {
       "id": "testName",
       "type": "promptString",
-      "description": "Ingrese el nombre del test a ejecutar",
-      "default": "test_manager"
+      "description": "Ingrese el nombre del test a ejecutar (sin el '.py')",
+      "default": "test_browsers"
+    },
+
+    {
+      "id": "testPackage",
+      "type": "promptString",
+      "description": "Ingrese el nombre del paquete (carpeta principal de los tests a ejecutar)",
+      "default": "tests_manager"
+    },
+
+    {
+      "id": "folderpkgTestName",
+      "type": "promptString",
+      "description": "Ingrese el nombre la carpeta principal",
+      "default": "tests"
+    },
+    
+    {
+      "id": "folderTests",
+      "type": "promptString",
+      "description": "Ingrese el nombre del test para crear el paquete",
+      "default": ""
     }
   ]
 }
