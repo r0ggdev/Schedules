@@ -3,8 +3,9 @@ from register import Register
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import pandas as pd
+import pandas as pd #! Instalar con pip install pandas (No esta en requirements.txt)
 import time
+import os
 
 WEB_URL = 'https://intranet.upc.edu.pe/loginintranet/loginupc.aspx' # URL del la pagina
 
@@ -40,6 +41,12 @@ def tableScraper(_table, _rows = (By.TAG_NAME, 'tr'), _cells = (By.TAG_NAME, 'td
     return save_table
 
 def saveTable(table, path):
+    directory = os.path.dirname(path)
+
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+        print(f"Directorio '{directory}' creado.")
+
     df = pd.DataFrame(table)
     df.to_csv(path, index=False, encoding="utf-8-sig")
     
