@@ -16,3 +16,6 @@ tests/example.py
 
 # Logs
 **/logs/
+
+# export
+exports/
