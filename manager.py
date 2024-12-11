@@ -1,6 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.remote.webdriver import WebDriver
-
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 class DriverManager:
     """
     Clase encargada de manejar el WebDriver de Selenium usando el patrón Singleton.
