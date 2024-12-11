@@ -1,13 +1,13 @@
-from manager import DriverManager
+from manager import *
 from register import Register 
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import pandas as pd #! Instalar con pip install pandas (No esta en requirements.txt)
+from cleaned import *
 import time
-import os
 
 WEB_URL = 'https://intranet.upc.edu.pe/loginintranet/loginupc.aspx' # URL del la pagina
+
+EXPORTS = './exports/' # Directorio de exportacion
+INFO = './exports/original/data.json' # Nombre del archivo JSON con la informacion del alumno
+HORARIO = './exports/original/horario.json' # Nombre del archivo JSON con el horario del alumno
 
 def logOut(manager, wait):
     # logout del sistema
@@ -40,17 +40,6 @@ def tableScraper(_table, _rows = (By.TAG_NAME, 'tr'), _cells = (By.TAG_NAME, 'td
     
     return save_table
 
-def saveTable(table, path):
-    directory = os.path.dirname(path)
-
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-        print(f"Directorio '{directory}' creado.")
-
-    df = pd.DataFrame(table)
-    df.to_csv(path, index=False, encoding="utf-8-sig")
-    
-    print("Tabla guardada en " + path)
 
 def main():    
     CREDENTIALS = Register() # Creamos una instancia de la clase Register
@@ -117,11 +106,14 @@ def main():
 
     # Recuperamos y guardamos el info en un archivo CSV
     table_info = tableScraper(_table = manager.find_element(By.XPATH, '//table[@align="left"]'))
-    saveTable(table_info, "./exports/info.csv")
+    saveTable(table_info, INFO)
 
     # Recuperamos y guardamos el horario en un archivo CSV
     table_schedule = tableScraper(_table = manager.find_element(By.XPATH, '//table[@bgcolor="800000"]'))
-    saveTable(table_schedule, "./exports/horario.csv")
+    saveTable(table_schedule, HORARIO)
+
+    clean_info(INFO, EXPORTS + 'cleaned/alumno.json')
+    procesar_horario(HORARIO, EXPORTS + 'cleaned/horario.json')
 
     # Esperamos 5 segundos
     time.sleep(5)
