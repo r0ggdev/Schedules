@@ -3,9 +3,30 @@
   
   "tasks": [
     {
+      "label": "🆗 Configuración inicial del proyecto",
+      "dependsOn": [
+        "🐍 createVirtualEnvironment",
+        "🤫 configCredentials"
+      ],
+      "dependsOrder": "sequence",
+      "group": "build"
+    },
+    {
       "label": "🐍 createVirtualEnvironment",
       "type": "shell",
       "command":"Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force; if (!(Test-Path -Path \".env\")) { python -m venv .env; .\\.env\\Scripts\\pip install -r requirements.txt } else { Write-Output \"El entorno virtual ya existe\" }",
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "🤫 configCredentials",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "./.vscode/tasks/create_credentials.py", // Llamamos al script Python
+        "${input:email}", // El email del usuario
+        "${input:password}" // La contraseña del usuario
+      ],
       "problemMatcher": [],
       "group": "build"
     },
@@ -79,6 +100,18 @@
       "id": "folderTests",
       "type": "promptString",
       "description": "Ingrese el nombre del test para crear el paquete",
+      "default": ""
+    },
+    {
+      "id": "email",
+      "type": "promptString",
+      "description": "Ingrese su usuario de la plataforma (Socrates)",
+      "default": ""
+    },
+    {
+      "id": "password",
+      "type": "promptString",
+      "description": "Ingrese su contraseña de la plataforma (Socrates)",
       "default": ""
     }
   ]
