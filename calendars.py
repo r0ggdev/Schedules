@@ -49,6 +49,8 @@ class HorarioICSGenerator:
         """
         try:
             days_to_add = (weekday - start_date.weekday()) % 7
+            if days_to_add == 0:  # Si ya es el día actual, avanza a la próxima semana
+                days_to_add = 7
             return start_date + timedelta(days=days_to_add)
         except Exception as e:
             print(f"Error al calcular el próximo día: {e}")
@@ -71,6 +73,9 @@ class HorarioICSGenerator:
 
             weekday = list(self.dias_semana.values()).index(abreviatura_dia)
             primer_dia = self.get_next_weekday(fecha_inicio_repeticion, weekday)
+
+            if 'hora_inicio' not in evento or 'hora_fin' not in evento:
+                raise ValueError("El evento debe contener 'hora_inicio' y 'hora_fin'.")
 
             start_time = primer_dia.strftime("%Y%m%d") + f"T{evento['hora_inicio'].replace(':', '')}00"
             end_time = primer_dia.strftime("%Y%m%d") + f"T{evento['hora_fin'].replace(':', '')}00"
@@ -126,28 +131,47 @@ class HorarioICSGenerator:
         except Exception as e:
             print(f"Error al guardar el archivo ICS: {e}")
 
+    def cargar_datos(self, ruta):
+        """Carga datos desde un archivo JSON."""
+        try:
+            with open(ruta, 'r', encoding='utf-8') as file:
+                return json.load(file)
+        except Exception as e:
+            print(f"Error al cargar datos: {e}")
+            return None
 
-# Ejemplo de uso
-if __name__ == "__main__":
-    generator = HorarioICSGenerator()
-    generator.iniciar_calendario()
-
-    try:
-        with open('./exports/cleaned/horario.json', 'r', encoding='utf-8') as file:
-            data = json.load(file)
-
-        fecha_inicio_repeticion = datetime.strptime("20241110", "%Y%m%d")
-        fecha_fin_repeticion = datetime.strptime("20241218", "%Y%m%d")
+    def procesar_eventos(self, data, fecha_inicio_repeticion, fecha_fin_repeticion):
+        """Procesa los eventos y los agrega al generador."""
+        if not data:
+            print("No hay datos para procesar.")
+            return
 
         for dia, eventos in data.items():
             if eventos:
                 for _, evento in eventos.items():
-                    generator.agregar_evento(dia, evento, fecha_inicio_repeticion, fecha_fin_repeticion)
+                    self.agregar_evento(dia, evento, fecha_inicio_repeticion, fecha_fin_repeticion)
             else:
                 print(f"No hay eventos para {dia}.")
 
-        generator.cerrar_calendario()
-        generator.guardar_archivo("./exports/horario.ics")
+    def generar_calendario(self, ruta_datos, ruta_salida, fecha_inicio, fecha_fin):
+        """Genera un archivo ICS a partir de un archivo JSON de eventos."""
+        self.iniciar_calendario()
 
-    except Exception as e:
-        print(f"Error al procesar los datos: {e}")
+        data = self.cargar_datos(ruta_datos)
+        if data is not None:
+            self.procesar_eventos(data, fecha_inicio, fecha_fin)
+
+        self.cerrar_calendario()
+        self.guardar_archivo(ruta_salida)
+
+
+# Ejemplo de uso:
+if __name__ == "__main__":
+    generator = HorarioICSGenerator()
+
+    ruta_datos = "./exports/cleaned/horario.json"
+    ruta_salida = "./exports/horario.ics"
+    fecha_inicio = datetime.strptime("20241110", "%Y%m%d")
+    fecha_fin = datetime.strptime("20241218", "%Y%m%d")
+
+    generator.generar_calendario(ruta_datos, ruta_salida, fecha_inicio, fecha_fin)

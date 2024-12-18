@@ -1,6 +1,7 @@
 from manager import *
 from register import Register 
 from cleaned import *
+from calendars import HorarioICSGenerator, datetime
 import time
 
 WEB_URL = 'https://intranet.upc.edu.pe/loginintranet/loginupc.aspx' # URL del la pagina
@@ -43,6 +44,7 @@ def tableScraper(_table, _rows = (By.TAG_NAME, 'tr'), _cells = (By.TAG_NAME, 'td
 
 def main():    
     CREDENTIALS = Register() # Creamos una instancia de la clase Register
+    generator = HorarioICSGenerator() # Creamos una instancia de la clase HorarioICSGenerator
     manager = DriverManager() # Creamos una instancia de la clase DriverManager
     wait = WebDriverWait(manager, 10) # Creamos una instancia de WebDriverWait
 
@@ -115,8 +117,13 @@ def main():
     clean_info(INFO, EXPORTS + 'cleaned/alumno.json')
     procesar_horario(HORARIO, EXPORTS + 'cleaned/horario.json')
 
-    # Esperamos 5 segundos
-    time.sleep(5)
+    fecha_inicio = datetime.strptime("20241110", "%Y%m%d")
+    fecha_fin = datetime.strptime("20241218", "%Y%m%d")
+    
+    generator.generar_calendario(EXPORTS+"cleaned/horario.json", EXPORTS+"horario.ics", fecha_inicio, fecha_fin)
+
+    manager.switch_to.window(original_window)
+    logOut(manager, wait)
 
 # Run the main function
 if __name__ == '__main__':
