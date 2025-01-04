@@ -1,6 +1,6 @@
 import unittest
 from selenium import webdriver
-from manager import DriverManager
+from logic.manager import DriverManager
 
 class TestBrowserCreation(unittest.TestCase):
     """Pruebas para verificar la creación y el comportamiento de diferentes WebDrivers."""

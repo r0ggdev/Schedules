@@ -2,7 +2,7 @@ import unittest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service as ChromeService
-from manager import DriverManager
+from logic.manager import DriverManager
 
 WEB_URL = 'https://www.selenium.dev/selenium/web/inputs.html'
 
