@@ -3,6 +3,7 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver  import ChromeOptions, FirefoxOptions, EdgeOptions, SafariOptions, IeOptions
 class DriverManager:
     """
     Clase encargada de manejar el WebDriver de Selenium usando el patrón Singleton.
@@ -26,22 +27,39 @@ class DriverManager:
 
     @classmethod
     def __create_driver(cls, driver_type, options):
-        """
-        Método interno para inicializar el WebDriver basado en el tipo de navegador.
-        """
-        drivers = {
-            'chrome': webdriver.Chrome,
-            'firefox': webdriver.Firefox,
-            'edge': webdriver.Edge,
-            'safari': webdriver.Safari,
-            'ie': webdriver.Ie,
-        }
+            """
+            Método interno para inicializar el WebDriver basado en el tipo de navegador.
+            """
+            drivers = {
+                'chrome': webdriver.Chrome,
+                'firefox': webdriver.Firefox,
+                'edge': webdriver.Edge,
+                'safari': webdriver.Safari,
+                'ie': webdriver.Ie,
+            }
 
-        if driver_type not in drivers:
-            raise ValueError(f"Unsupported browser type: {driver_type}")
+            options_mapping = {
+                'chrome': ChromeOptions,
+                'firefox': FirefoxOptions,
+                'edge': EdgeOptions,
+                'safari': SafariOptions,
+                'ie': IeOptions,
+            }
 
-        # Si no se proporciona `options`, Selenium usará su configuración predeterminada.
-        return drivers[driver_type](options=options) if options else drivers[driver_type]()
+            if driver_type not in drivers:
+                raise ValueError(f"Unsupported browser type: {driver_type}")
+
+            # Crea las opciones del navegador si se proporcionan
+            browser_options = options_mapping[driver_type]()
+            
+            # Si se pasa un objeto de opciones, lo aplicamos
+            if options:
+                for option in options:
+                    browser_options.add_argument(option)  # Puedes agregar más configuraciones específicas
+
+            # Crea el WebDriver con las opciones configuradas
+            return drivers[driver_type](options=browser_options)
+
 
     @classmethod
     def _reset(cls):
