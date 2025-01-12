@@ -1,8 +1,8 @@
 import json
 from datetime import datetime, timedelta
 
-class HorarioICSGenerator:
-    def __init__(self, timezone="America/Lima", calendar_name="Horario Clases"):
+class ICSGenerator:
+    def __init__(self, timezone = "America/Lima", calendar_name = "Horario Clases"):
         self.timezone = timezone
         self.calendar_name = calendar_name
         self.dias_semana = {
@@ -16,7 +16,7 @@ class HorarioICSGenerator:
         }
         self.ics_content = ""
 
-    def iniciar_calendario(self):
+    def startCalendar(self):
         """Inicializa el contenido del archivo ICS."""
         self.ics_content = (
             "BEGIN:VCALENDAR\n"
@@ -36,7 +36,7 @@ class HorarioICSGenerator:
             "END:VTIMEZONE\n"
         )
 
-    def get_next_weekday(self, start_date, weekday):
+    def findNextWeekday(self, start_date, weekday):
         """
         Calcula el próximo día de la semana después de una fecha dada.
 
@@ -56,7 +56,7 @@ class HorarioICSGenerator:
             print(f"Error al calcular el próximo día: {e}")
             return None
 
-    def agregar_evento(self, dia, evento, fecha_inicio_repeticion, fecha_fin_repeticion):
+    def addEvent(self, dia, evento, fecha_inicio_repeticion, fecha_fin_repeticion):
         """
         Agrega un evento al calendario en formato ICS.
 
@@ -72,7 +72,7 @@ class HorarioICSGenerator:
                 raise ValueError(f"Día no válido: {dia}")
 
             weekday = list(self.dias_semana.values()).index(abreviatura_dia)
-            primer_dia = self.get_next_weekday(fecha_inicio_repeticion, weekday)
+            primer_dia = self.findNextWeekday(fecha_inicio_repeticion, weekday)
 
             if 'hora_inicio' not in evento or 'hora_fin' not in evento:
                 raise ValueError("El evento debe contener 'hora_inicio' y 'hora_fin'.")
@@ -113,11 +113,11 @@ class HorarioICSGenerator:
         except Exception as e:
             print(f"Error al agregar el evento: {e}")
 
-    def cerrar_calendario(self):
+    def closeCalendar(self):
         """Cierra el contenido del archivo ICS."""
         self.ics_content += "END:VCALENDAR\n"
 
-    def guardar_archivo(self, filepath):
+    def saveICS(self, filepath):
         """
         Guarda el contenido del calendario en un archivo.
 
@@ -131,47 +131,111 @@ class HorarioICSGenerator:
         except Exception as e:
             print(f"Error al guardar el archivo ICS: {e}")
 
-    def cargar_datos(self, ruta):
-        """Carga datos desde un archivo JSON."""
-        try:
-            with open(ruta, 'r', encoding='utf-8') as file:
-                return json.load(file)
-        except Exception as e:
-            print(f"Error al cargar datos: {e}")
-            return None
+    def generate(self, courses, export_path, start_date = ('dd','mm','YYYY'), end_date = ('dd','mm','YYYY')):
+        
+        date ={
+            'start': datetime(start_date[2], start_date[1], start_date[0]),
+            'end': datetime(end_date[2], end_date[1], end_date[0])
+        }
 
-    def procesar_eventos(self, data, fecha_inicio_repeticion, fecha_fin_repeticion):
-        """Procesa los eventos y los agrega al generador."""
-        if not data:
-            print("No hay datos para procesar.")
-            return
+        self.startCalendar()
 
-        for dia, eventos in data.items():
-            if eventos:
-                for _, evento in eventos.items():
-                    self.agregar_evento(dia, evento, fecha_inicio_repeticion, fecha_fin_repeticion)
-            else:
-                print(f"No hay eventos para {dia}.")
+        for course_code, course in courses.items():
+            course_days = course.getDays()
 
-    def generar_calendario(self, ruta_datos, ruta_salida, fecha_inicio, fecha_fin):
-        """Genera un archivo ICS a partir de un archivo JSON de eventos."""
-        self.iniciar_calendario()
+            for day, details in course_days.items():
+                evento = {
+                    'codigo': course.getCode(),
+                    'nombre': course.getName(),
+                    'grupo': course.getGroup(),
+                    'seccion': course.getSection(),
+                    'local': course.getLocal(),
+                    'modalidad': course.getMode(),
+                    'salon': details['salon'],
+                    'hora_inicio': details['hora_inicio'],
+                    'hora_fin': details['hora_fin']
+                }
 
-        data = self.cargar_datos(ruta_datos)
-        if data is not None:
-            self.procesar_eventos(data, fecha_inicio, fecha_fin)
+                self.addEvent(day, evento, date['start'], date['end'])
 
-        self.cerrar_calendario()
-        self.guardar_archivo(ruta_salida)
+        self.closeCalendar()
+        self.saveICS(export_path)
 
 
 # Ejemplo de uso:
 if __name__ == "__main__":
-    generator = HorarioICSGenerator()
-
-    ruta_datos = "./exports/cleaned/horario.json"
+    generator = ICSGenerator()
     ruta_salida = "./exports/horario.ics"
-    fecha_inicio = datetime.strptime("20241110", "%Y%m%d")
-    fecha_fin = datetime.strptime("20241218", "%Y%m%d")
+    
+    courses ={ 
+        'SI400': {
+            'codigo': 'SI400', 
+            'grupo': '00', 
+            'dias': {
+                'lunes': {'salon': 'UH-45', 'hora_inicio': '07:00', 'hora_fin': '09:00'}, 
+                'jueves': {'salon': 'UC-44', 'hora_inicio': '07:00', 'hora_fin': '09:00'}
+            }, 
+            'seccion': 'SI35', 
+            'local': 'MO', 
+            'modalidad': 'Presencial'
+        }, 
+        
+        'MA263': {
+            'codigo': 'MA263', 
+            'grupo': '00', 
+            'dias': {
+                'lunes': {'salon': 'UE-48', 'hora_inicio': '11:00', 'hora_fin': '13:00'}, 
+                'jueves': {'salon': 'UB-45', 'hora_inicio': '11:00', 'hora_fin': '13:00'}
+            }, 
+            'seccion': 'SW51', 
+            'local': 'MO', 
+            'modalidad': 'Presencial'
+        }, 
+        
+        'SI725': {
+            'codigo': 'SI725', 
+            'grupo': '00', 
+            'dias': {
+                'miercoles': {'salon': 'UD-57', 'hora_inicio': '07:00', 'hora_fin': '09:00'}, 
+                'jueves': {'salon': 'UH-56', 'hora_inicio': '13:00', 'hora_fin': '15:00'}
+            }, 
+            'seccion': 'CC48', 
+            'local': 'MO', 
+            'modalidad': 'Presencial'
+        }, 
+        
+        'MA475': {
+            'codigo': 'MA475', 
+            'grupo': '00', 
+            'dias': {
+                'miercoles': {'salon': 'CC45', 'hora_inicio': '15:00', 'hora_fin': '17:00'}
+            }, 
+            'seccion': None, 
+            'local': None, 
+            'modalidad': 'A distancia'
+        }, 
+        
+        'SI385': {
+            'codigo': 'SI385', 
+            'grupo': '00', 
+            'dias': {
+                'jueves': {'salon': 'UH-45', 'hora_inicio': '09:00', 'hora_fin': '11:00'}
+            },
+            'seccion': 'SI49', 
+            'local': 'MO', 
+            'modalidad': 'Presencial'
+        }, 
+        
+        'CC184': {
+            'codigo': 'CC184', 
+            'grupo': '00', 
+            'dias': {
+                'sabado': {'salon': 'UH-41', 'hora_inicio': '07:00', 'hora_fin': '11:00'}
+            }, 
+            'seccion': 'CC42', 
+            'local': 'MO', 
+            'modalidad': 'Presencial'
+        }
+    }
 
-    generator.generar_calendario(ruta_datos, ruta_salida, fecha_inicio, fecha_fin)
+    generator.generate(courses, ruta_salida, (10,11,2024), (10,14,2024))
