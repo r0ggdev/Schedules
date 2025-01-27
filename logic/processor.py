@@ -1,4 +1,3 @@
-from datetime import datetime
 from .manager import DriverManager
 from .calendars import ICSGenerator
 from .scraping import Scraper
@@ -15,10 +14,8 @@ class Processor:
 
         self.table_info = None
         self.table_schedule = None
-
+        self.driver = None
         self.chrome_options = ["--headless", "--disable-gpu", "--window-size=1920x1080"]
-        self.__manager = DriverManager('chrome', self.chrome_options)
-        self.scraper = Scraper(self.__manager, self.url)
         
         self.data_user = User()
         self.data_courses = None
@@ -49,14 +46,30 @@ class Processor:
         self.user = user
         self.password = password
 
-    def scrapeData(self):
-        if self.scraper.login(self.user, self.password):
-            print("Login exitoso")
-            self.scraper.redirectSchedule()
-            
-            self.table_info, self.table_schedule = self.scraper.extractData()
+    def createDriver(self):
+        if self.driver is None:
+            self.driver = DriverManager('chrome', self.chrome_options)
 
-            return True
+    def closeDriver(self):
+        if self.driver:
+            self.driver.quit()
+        self.driver = None
+
+    def scrapeData(self):
+        self.createDriver()
+        scraper = Scraper(self.driver, self.url)
+
+        if scraper.login(self.user, self.password):
+            scraper.redirectSchedule()
+
+            self.table_info, self.table_schedule = scraper.extractData()
+            if (self.table_info and self.table_schedule) or self.table_schedule:
+                return True
+            else:
+                return False
+            
+        else:
+            return False
         
     def processData(self):
         cleaned = Cleaned()
@@ -295,10 +308,11 @@ if __name__ == '__main__':
     }
     
     processor = Processor()
+    processor.scrapeData()
 
-    processor.setTableSchedule(horario)
-    processor.setTableInfo(data)
+    #processor.setTableSchedule(horario)
+    #processor.setTableInfo(data)
 
-    processor.processData()
+    #processor.processData()
 
-    processor.generateICS('./export.ics',(12,1,2025),(12,3,2025))
+    #processor.generateICS('./export.ics',(12,1,2025),(12,3,2025))
