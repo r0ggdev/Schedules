@@ -1,0 +1,51 @@
+{
+    "icons":{
+
+        "icon": "gui/source/icon.ico",
+
+        "titlebar":{
+            "logo": "gui/source/icons/Logo@3x.png",
+            "close": "gui/source/icons/close.svg",
+            "fullscreen": "gui/source/icons/close_fullscreen.svg"
+        },
+
+        "menubar":{
+
+            "colormode":{
+                "auto": "gui/source/icons/night_light_auto.svg",
+                "light": "gui/source/icons/light_mode.svg",
+                "dark": "gui/source/icons/dark_mode.svg"
+            },
+            
+            "help": "gui/source/icons/question.svg"
+        },
+
+        "pages":{
+
+            "auto":{
+                "icon":"gui/source/icons/home.svg",
+
+                "filterSection":{
+                    "save": "gui/source/icons/save.svg"                
+                }
+            },
+
+            "manual":{
+                "icon":"gui/source/icons/table.svg"
+            }
+        }
+    },
+
+    "styles":{
+        "global": "gui/styles/global.css",
+        "specific": "gui/styles/specific.css"
+    },
+
+    "fonts":{
+        "fallback":"Arial",
+        "regular": "gui/source/fonts/Poppins-Regular.ttf",
+        "medium": "gui/source/fonts/Poppins-Medium.ttf",
+        "bold": "gui/source/fonts/Poppins-Bold.ttf"
+    }
+
+}
