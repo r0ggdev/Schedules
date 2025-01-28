@@ -126,13 +126,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 'dark':{
                     'state': 1,
                     'icon': self.tools.create.ico('icons', 'menubar/colormode/dark'),
-                    'style': self.tools.loadCSS('global')
+                    'style': self.tools.loadCSS('dark')
                 },
 
                 'light':{
                     'state': 2,
                     'icon': self.tools.create.ico('icons', 'menubar/colormode/light'),
-                    'style':  self.tools.loadCSS('specific')
+                    'style':  self.tools.loadCSS('light')
                 }
             }
         }
