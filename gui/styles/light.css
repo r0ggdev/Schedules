@@ -1,0 +1,136 @@
+QMainWindow {
+    background-color: #ffffff; /* Fondo blanco para la ventana principal */
+    color: #333333;
+}
+
+/* Estilos del tema claro */
+#menuOptions {
+    background-color: #f4f4f4; /* Fondo suave para el menú */
+    border-radius: 5px;
+}
+
+#menuOptions QPushButton {
+    border: none;
+    background-color: none;
+    border-radius: 6px;
+    color: #333333; /* Color de texto oscuro para los botones */
+}
+
+#menuOptions QPushButton:checked {
+    background-color: #A92849; /* Fondo rojo para el botón seleccionado */
+    color: #ffffff; /* Texto blanco para el botón seleccionado */
+}
+
+#ohterOptions QPushButton {
+    background-color: none;
+    border: none;
+    color: #333333; /* Texto oscuro */
+}
+
+#ohterOptions QPushButton:hover {
+    background-color: #C94B6B; /* Fondo suave cuando se pasa el ratón */
+    color: #ffffff; /* Texto blanco en el hover */
+    border-radius: 10px;
+}
+
+#frame_form QPushButton {
+    background-color: #A92849; /* Fondo rojo para los botones */
+    color: #ffffff; /* Texto blanco */
+    border-radius: 5px;
+    padding: 5px;
+}
+
+#frame_form QPushButton:hover {
+    background-color: #C94B6B; /* Hover más claro */
+    color: #ffffff; /* Texto blanco en el hover */
+}
+
+#frame_form QLineEdit {
+    background-color: #ffffff; /* Fondo blanco para los campos de texto */
+    color: #333333; /* Texto oscuro */
+    border-radius: 5px;
+    padding: 4px;
+    border: 1px solid #cccccc; /* Borde gris claro */
+}
+
+#frame_form QLineEdit:focus {
+    border-color: #C94B6B; /* Borde rosa al enfocar */
+    border-width: 2px;
+}
+
+#frame_form QGroupBox {
+    font-size: 10px;
+    border: 1px solid #A92849; /* Borde rojo para los grupos */
+    padding: 15px;
+    border-radius: 6px;
+    color: #333333; /* Texto oscuro */
+}
+
+QDateEdit {
+    font-size: 12px;
+    background-color: #ffffff; /* Fondo blanco */
+    color: #333333; /* Texto oscuro */
+    border: 1px solid #cccccc; /* Borde gris claro */
+    border-radius: 6px;
+}
+
+QDateEdit:focus {
+    border-color: #C94B6B; /* Borde rosa al enfocar */
+    border: 2px solid #C94B6B;
+}
+
+#title {
+    font-size: 15px;
+    font-weight: bold;
+    color: #333333; /* Título con texto oscuro */
+}
+
+QProgressBar {
+    height: 5px;
+    padding: 5px;
+    border-radius: 6px;
+    text-align: center;
+    background-color: #f0f0f0; /* Fondo más claro para la barra de progreso */
+}
+
+QProgressBar::chunk {
+    background-color: #C94B6B; /* Barra de progreso en color rosa */
+    border-radius: 4px;
+}
+
+#frame_titleBar {
+    background-color: #f4f4f4; /* Fondo más claro para la barra de título */
+    color: #333333; /* Texto oscuro */
+    border-radius: 6px;
+}
+
+#frame_titleBar QPushButton {
+    background-color: #ffffff; /* Fondo blanco para los botones de la barra de título */
+    width: 20px;
+    height: 20px;
+    border-radius: 10%;
+    border: 1px solid #cccccc; /* Borde suave */
+}
+
+#frame_titleBar #btn_closeFullscreen {
+    background-color: #ffffff; /* Fondo blanco */
+}
+
+#frame_titleBar #btn_closeFullscreen:hover {
+    background-color: #e0e0e0; /* Fondo gris al pasar el ratón */
+}
+
+#frame_titleBar #btn_close {
+    background-color: #A92849; /* Fondo rojo para el botón de cierre */
+}
+
+#frame_titleBar #btn_close:hover {
+    background-color: #C94B6B; /* Fondo rosa al pasar el ratón */
+}
+
+
+/*Estilos que no deben cambiar*/
+#frame_menuBar, #mainFrame, #frameOptions, #ohterOptions, #frame_content, #frame_form{
+    border: none;
+    background-color: none;
+}
