@@ -1,0 +1,9 @@
+#menubar, #leftFrame, #otherOptions, #form, #content, #courses, #filter{
+    border: none;
+    background-color: none;
+}
+
+Line{
+    border: none;
+    background-color: none;
+}

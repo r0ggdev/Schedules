@@ -1,0 +1,66 @@
+QDateEdit #qt_calendar_navigationbar {
+    background-color: #A92849;
+    border-radius: 6px;
+}
+
+QDateEdit #qt_calendar_monthbutton::menu-indicator{
+   width:0px;
+}
+
+QDateEdit #qt_calendar_prevmonth, #qt_calendar_nextmonth {
+    border: none;
+    color: white;
+    background-color: transparent;
+    border-radius: 6px;
+}
+
+QDateEdit #qt_calendar_prevmonth {
+    qproperty-icon: url("gui/source/icons/chevron_left.svg");
+}
+
+QDateEdit #qt_calendar_nextmonth {
+    qproperty-icon: url("gui/source/icons/chevron_right.svg");
+}
+
+QDateEdit #qt_calendar_prevmonth:hover, #qt_calendar_nextmonth:hover {
+    background-color: rgba(225, 225, 225, 100);
+}
+
+QDateEdit #qt_calendar_prevmonth:pressed, #qt_calendar_nextmonth:pressed {
+    background-color: rgba(235, 235, 235, 100);
+}
+
+QDateEdit #qt_calendar_yearbutton, #qt_calendar_monthbutton {
+    color: white;
+    margin: 5px;
+    border-radius: 4px;
+}
+
+QDateEdit #qt_calendar_yearbutton:hover, #qt_calendar_monthbutton:hover {
+    background-color: rgba(225, 225, 225, 100);
+}
+
+QDateEdit #qt_calendar_yearbutton:pressed, #qt_calendar_monthbutton:pressed {
+    background-color: rgba(235, 235, 235, 100);
+}
+
+QDateEdit #qt_calendar_yearedit {
+    color: white;
+    background: rgba(235, 235, 235, 100);
+}
+
+QCalendarWidget QAbstractItemView {
+    background-color: #292929; /*color de fondo*/
+    border: none;
+}
+
+QCalendarWidget QTableView::item:selected {
+    background-color: #C94B6B; /*color seleccionado*/
+    color: white;
+    border-radius: 12px;
+}
+
+QCalendarWidget QAbstractItemView::item:hover {
+    background-color: rgba(235, 235, 235, 100);
+    color: white;
+}
