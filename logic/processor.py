@@ -73,11 +73,20 @@ class Processor:
         
     def processData(self):
         cleaned = Cleaned()
-        clean_schedule = cleaned.clean_schedule(self.table_schedule)
-        clean_user = cleaned.cleanedInfo(self.table_info)
+        try:
+            clean_schedule = cleaned.clean_schedule(self.table_schedule)
+            self.data_courses = self.__processCourses(clean_schedule)
+        except:
+            print("Error al limpiar el horario")
+        
+        try:
+            clean_user = cleaned.cleanedInfo(self.table_info)
+            self.data_user.loadUser(clean_user)
+        except:
+            print("Error al limpiar la información del usuario")
 
-        self.data_user.loadUser(clean_user)
-        self.data_courses = self.__processCourses(clean_schedule)
+        # clean_user = cleaned.cleanedInfo(self.table_info)
+
     
     def generateICS(self, path, start_date, end_date):
         ics = ICSGenerator()
