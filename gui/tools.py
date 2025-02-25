@@ -197,6 +197,19 @@ class Themes:
         """Obtiene el estado del tema específico"""
         return self.themes.get(theme, {}).get('state', None)
 
+class CBX:
+    def __init__(self):
+        object = None
+
+    def index(self, obj):
+        values = []
+        for key in range(obj.count()):
+            values.append((key, obj.itemText(key)))
+
+        return values
+
+
+
 class Tools:
     def __init__(self):
         self.create = Create()
@@ -228,7 +241,7 @@ class Tools:
 
     # funciones
     def console(self, message:str):
-        self.objconsole.setText(message)
+        self.objconsole.setPlainText(message)
         
     def toggle(self, stackedWidget):
         
@@ -269,6 +282,22 @@ class Tools:
         else:
             return ""
     
+    def specificStyle(self, styles=None):
+        if styles is None:
+            styles = []
+
+        specifics = ""
+
+        for style in styles:
+            try:
+                specifics += self.loadCSS(style)
+            except FileNotFoundError:
+                print(f"El archivo CSS '{style}' no se encontró.")
+            except Exception as e:
+                print(f"Error al cargar el archivo CSS '{style}': {e}")
+
+        return specifics
+
     def dialogFile(self, type):
         options = QFileDialog.Options()
         file_name, _ = QFileDialog.getSaveFileName(

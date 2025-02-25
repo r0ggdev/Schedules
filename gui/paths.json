@@ -38,7 +38,7 @@
 
     "styles":{
         "global": "gui/styles/global.css",
-        "specific": "gui/styles/specific.css",
+        "calendar": "gui/styles/calendar.css",
         "dark": "gui/styles/dark.css",
         "light": "gui/styles/light.css"
     },
