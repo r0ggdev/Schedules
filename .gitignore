@@ -19,3 +19,9 @@ tests/example.py
 
 # export
 exports/
+
+app.spec
+interfaceV01.ui
+interfaceV02.ui
+
+#build.py
